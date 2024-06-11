@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { loginWithRedirect, logout, isLoading, isAuthenticated } = useAuth0();
@@ -28,8 +29,8 @@ const Header = () => {
       <div className="container m-auto px-2 md:px-12 lg:px-7">
         <div className="flex flex-wrap items-center justify-between py-3 gap-6 md:py-4 md:gap-0">
           <div className="w-full px-6 flex justify-between lg:w-max md:px-0">
-            <a
-              href="https://tailus.io/blocks/hero-section"
+            <Link
+              to="/"
               aria-label="logo"
               className="flex space-x-2 items-center"
             >
@@ -43,7 +44,7 @@ const Header = () => {
               <span className="text-2xl font-bold text-yellow-900">
                 Tailus <span className="text-yellow-700">Feedus</span>
               </span>
-            </a>
+            </Link>
             <button
               aria-label="humburger"
               id="hamburger"
