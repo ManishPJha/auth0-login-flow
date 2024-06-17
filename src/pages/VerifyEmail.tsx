@@ -1,31 +1,22 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const VerifyEmail = () => {
-  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+
+  const { loginWithRedirect } = useAuth0();
 
   const handleResendEmail = async () => {
     try {
-      const response = await axios.post("/api/resend-verification-email", {
-        email,
-      });
-      setMessage(response.data.message);
+      loginWithRedirect();
+      setMessage(
+        "Verification email has been sent! Please Verify your email address and try again later."
+      );
     } catch (error) {
-      setMessage("Error resending verification email.");
+      setMessage("Error resending verification email. Please try again later.");
     }
   };
-
-  const handleSignOut = () => {
-    window.location.href =
-      "https://securzy.us.auth0.com/v2/logout?returnTo=https://securzy.io";
-  };
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    setEmail(searchParams.get("email") || "");
-  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -40,7 +31,7 @@ const VerifyEmail = () => {
         <div className="flex flex-col items-center py-4">
           <button
             className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-red-600"
-            onClick={handleSignOut}
+            onClick={() => loginWithRedirect()}
           >
             Continue
           </button>

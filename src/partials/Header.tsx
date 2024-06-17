@@ -1,9 +1,12 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const { loginWithRedirect, logout, isLoading, isAuthenticated } = useAuth0();
+  const { loginWithRedirect, logout, isLoading, isAuthenticated, error } =
+    useAuth0();
+
+  const navigate = useNavigate();
 
   const handleSignIn = () => {
     loginWithRedirect();
@@ -15,12 +18,22 @@ const Header = () => {
   };
 
   const handleSignUp = () => {
-    loginWithRedirect({ authorizationParams: { screen_hint: "signup" } });
+    loginWithRedirect({
+      authorizationParams: {
+        screen_hint: "signup",
+      },
+    });
   };
 
   useEffect(() => {
-    console.log("🍌 ", isAuthenticated);
-  }, [isAuthenticated]);
+    // console.log("🍌 ", isAuthenticated);
+    if (
+      error?.message === "Please verify your email before logging in." &&
+      !isAuthenticated
+    ) {
+      navigate("/verify-email", { replace: true });
+    }
+  }, [isAuthenticated, error?.message, navigate]);
 
   if (isLoading) return <>Loading...</>;
 

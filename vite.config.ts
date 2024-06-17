@@ -18,6 +18,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
+        // target: "https://auth0-service.vercel.app/api",
         target: "http://localhost:4000/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
