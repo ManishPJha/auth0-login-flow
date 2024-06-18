@@ -1,11 +1,16 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const VerifyEmail = () => {
   const [message, setMessage] = useState("");
 
   const { loginWithRedirect } = useAuth0();
+
+  const location = useLocation();
+
+  const searchParams = new URLSearchParams(location.search);
+  const isVerifiedUser = searchParams.get("isVerifed") === "true";
 
   const handleResendEmail = async () => {
     try {
@@ -17,6 +22,12 @@ const VerifyEmail = () => {
       setMessage("Error resending verification email. Please try again later.");
     }
   };
+
+  useEffect(() => {
+    if (isVerifiedUser) {
+      loginWithRedirect();
+    }
+  }, [isVerifiedUser, loginWithRedirect]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
